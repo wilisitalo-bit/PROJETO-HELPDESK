@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Help Desk | Central de Chamados</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <header class="cabecalho">
+        <div class="marca">
+            <div class="marca-icone">HD</div>
+
+            <div>
+                <h1>Help Desk</h1>
+                <p>Central de atendimento</p>
+            </div>
+        </div>
+
+        <div class="usuario">
+            <span class="usuario-status"></span>
+            <span>Central de suporte</span>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="boas-vindas">
+            <div>
+                <span class="subtitulo">PAINEL DE CONTROLE</span>
+                <h2>Gestão de chamados</h2>
+                <p>Acompanhe e gerencie as solicitações de suporte.</p>
+            </div>
+
+            <button id="btnNovoChamado" class="botao-principal">
+                + Novo chamado
+            </button>
+        </section>
+
+        <section class="indicadores">
+
+            <article class="cartao-indicador">
+                <div class="indicador-icone icone-total">#</div>
+                <div>
+                    <p>Total de chamados</p>
+                    <strong id="totalChamados">0</strong>
+                </div>
+            </article>
+
+            <article class="cartao-indicador">
+                <div class="indicador-icone icone-aberto">!</div>
+                <div>
+                    <p>Abertos</p>
+                    <strong id="chamadosAbertos">0</strong>
+                </div>
+            </article>
+
+            <article class="cartao-indicador">
+                <div class="indicador-icone icone-andamento">↻</div>
+                <div>
+                    <p>Em andamento</p>
+                    <strong id="chamadosAndamento">0</strong>
+                </div>
+            </article>
+
+            <article class="cartao-indicador">
+                <div class="indicador-icone icone-fechado">✓</div>
+                <div>
+                    <p>Fechados</p>
+                    <strong id="chamadosFechados">0</strong>
+                </div>
+            </article>
+
+        </section>
+
+        <section class="painel-chamados">
+
+            <div class="painel-titulo">
+                <div>
+                    <h3>Chamados cadastrados</h3>
+                    <p>Consulte e gerencie as solicitações.</p>
+                </div>
+            </div>
+
+            <div class="filtros">
+
+                <div class="campo-pesquisa">
+                    <label for="pesquisaChamados">Pesquisar</label>
+                    <input
+                        type="search"
+                        id="pesquisaChamados"
+                        placeholder="Buscar por título ou categoria..."
+                    >
+                </div>
+
+                <div class="campo-filtro">
+                    <label for="filtroStatus">Filtrar por status</label>
+
+                    <select id="filtroStatus">
+                        <option value="">Todos os status</option>
+                        <option value="ABERTO">Aberto</option>
+                        <option value="EM_ANDAMENTO">Em andamento</option>
+                        <option value="FECHADO">Fechado</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div id="mensagem" class="mensagem" role="status"></div>
+
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Categoria</th>
+                            <th>Prioridade</th>
+                            <th>Status</th>
+                            <th>Data de abertura</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="listaChamados">
+                        <tr>
+                            <td colspan="7" class="carregando">
+                                Os chamados serão carregados pela API.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <footer class="rodape">
+            <p>Help Desk — Sistema de gerenciamento de chamados</p>
+        </footer>
+
+    </main>
+
+    <dialog id="modalChamado" class="modal">
+
+        <form id="formChamado">
+
+            <div class="modal-cabecalho">
+                <div>
+                    <span class="subtitulo">CENTRAL DE ATENDIMENTO</span>
+                    <h2 id="tituloModal">Novo chamado</h2>
+                </div>
+
+                <button
+                    type="button"
+                    id="btnFecharModal"
+                    class="botao-fechar"
+                    aria-label="Fechar formulário"
+                >
+                    &times;
+                </button>
+            </div>
+
+            <input type="hidden" id="chamadoId">
+
+            <div class="campo-formulario">
+                <label for="titulo">Título *</label>
+                <input
+                    type="text"
+                    id="titulo"
+                    maxlength="150"
+                    required
+                    placeholder="Ex.: Computador não liga"
+                >
+            </div>
+
+            <div class="campo-formulario">
+                <label for="descricao">Descrição *</label>
+                <textarea
+                    id="descricao"
+                    rows="4"
+                    required
+                    placeholder="Descreva o problema encontrado..."
+                ></textarea>
+            </div>
+
+            <div class="campo-formulario">
+                <label for="categoria">Categoria *</label>
+                <input
+                    type="text"
+                    id="categoria"
+                    maxlength="50"
+                    required
+                    placeholder="Ex.: Hardware, Software, Rede"
+                >
+            </div>
+
+            <div class="campos-duplos">
+
+                <div class="campo-formulario">
+                    <label for="prioridade">Prioridade</label>
+
+                    <select id="prioridade">
+                        <option value="BAIXA">Baixa</option>
+                        <option value="MEDIA" selected>Média</option>
+                        <option value="ALTA">Alta</option>
+                    </select>
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="status">Status</label>
+
+                    <select id="status">
+                        <option value="ABERTO">Aberto</option>
+                        <option value="EM_ANDAMENTO">Em andamento</option>
+                        <option value="FECHADO">Fechado</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div id="erroFormulario" class="erro-formulario" role="alert"></div>
+
+            <div class="modal-acoes">
+                <button
+                    type="button"
+                    id="btnCancelar"
+                    class="botao-secundario"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="submit"
+                    id="btnSalvar"
+                    class="botao-principal"
+                >
+                    Salvar chamado
+                </button>
+            </div>
+
+        </form>
+
+    </dialog>
+
+</body>
+</html>
